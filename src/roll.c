@@ -109,7 +109,10 @@ int parse(char* roll)
 int main(int argc, char *argv[])
 {
 	if(argc > 1 && (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0))
+	{
 		help(0);
+		return 0;
+	}
 	if(argc > 1 && (strcmp(argv[1], "--version") == 0 || strcmp(argv[1], "-V") == 0))
 	{
 		help(4);
