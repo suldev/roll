@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 
+int split = 0;
 void help(int error)
 {
 	// General error reporting, handles all error messages
@@ -18,12 +19,14 @@ void help(int error)
 		printf("Roll was malformed\n");
 		break;
 	case 4:
-		printf("Terminal DnD roller version 0.1\n");
+		printf("Terminal DnD roller version 0.2\n");
 		return;
 	default:
 		break;
 	}
 	printf("DnD roll on the terminal\n");
+	printf("Flags:\n");
+	printf("\t-s: do not combine rolls\n");
 	printf("Examples:\n");
 	printf("\troll 1d6: rolls a d6 and returns the value\n");
 	printf("\troll 2d10: rolls two d10 and returns the value\n");
@@ -92,17 +95,33 @@ int parse(char* roll)
 		return 1;
 
 	int value = 0;
+	int temp = 0;
 	srand((unsigned int)time(NULL));
-	for(int j = 0; j < number; j = j + 1)
+	if(split)
 	{
-		int temp = rand() % die + 1;
-		value = value + temp;
+		for(int j = 0; j < number; j = j + 1)
+		{
+			temp = rand() % die + 1;
+			if(sign < 0)
+				printf("%i ", temp - mod);
+			else
+				printf("%i ", temp + mod);
+		}
+		printf("\n");
 	}
-
-	if(sign < 0)
-		printf("(%i-%i)=%i\n", value, mod, value - mod);
 	else
-		printf("(%i+%i)=%i\n", value, mod, value + mod);
+	{
+		for(int j = 0; j < number; j = j + 1)
+		{
+			temp = rand() % die + 1;
+			value = value + temp;
+		}
+
+		if(sign < 0)
+			printf("(%i-%i)=%i\n", value, mod, value - mod);
+		else
+			printf("(%i+%i)=%i\n", value, mod, value + mod);
+	}
 	return 0;
 }
 
@@ -125,6 +144,15 @@ int main(int argc, char *argv[])
 		break;
 	case 2:
 		if(parse(argv[1]))
+		{
+			help(3);
+			return 1;
+		}
+		break;
+	case 3:
+		if(strcmp(argv[1], "-s") == 0)
+			split = 1;
+		if(parse(argv[2]))
 		{
 			help(3);
 			return 1;
