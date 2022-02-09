@@ -3,6 +3,15 @@
 #include <string.h>
 #include <time.h>
 
+#define KEY_PLUS 43
+#define KEY_MINUS 45
+#define NUMBER_0 48
+#define NUMBER_9 57
+#define KEY_A_UPPER 65
+#define KEY_D_UPPER 68
+#define KEY_D_LOWER 100
+#define KEY_Z_LOWER 122
+
 int split = 0;
 void help(int error)
 {
@@ -43,13 +52,12 @@ int chkstr(char* roll)
 	while(*c != 0)
 	{
 		int i = (int) *c;
-		if(i < 48 || i > 57)
-			if(i != 100 && i != 43 && i != 45)
-				return 1;
-		if(i == 100)
+		if(i == KEY_D_LOWER || i == KEY_D_UPPER)
 			d = d + 1;
-		if(i == 43 || i == 45)
+		else if(i == KEY_PLUS || i == KEY_MINUS)
 			sign = sign + 1;
+		else if(i < NUMBER_0 || i > NUMBER_9)
+			return 1;
 		c = c + 1;
 	}
 	//Check if 'd' or sign is used more than once
@@ -70,7 +78,7 @@ int parse(char* roll)
 		return 1;
 	if(strpbrk(roll, "-"))
 		sign = -1;
-	c = strtok(roll, "d+-");
+	c = strtok(roll, "Dd+-");
 	while(c != NULL)
 	{
 		switch(i)
@@ -87,7 +95,7 @@ int parse(char* roll)
 		default:
 			return 1;
 		}
-		c = strtok (NULL,"d+-");
+		c = strtok (NULL,"Dd+-");
 		i = i + 1;
 	}
 	
