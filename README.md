@@ -9,6 +9,7 @@ Switches
 
 How to Install:  
 `$ make`
-`# sudo make install`
+
+`# make install`
   
 Very simple program, primarily written to learn C, makefile and git  
